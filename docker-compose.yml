@@ -1,0 +1,51 @@
+services:
+  tasklist:
+    build: .
+    container_name: tasklist
+    ports:
+      - "8050:3000"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    networks:
+      - tasklist_network
+    environment:
+      - NODE_ENV=development
+      - DB_HOST=tasklist_db
+      - DB_PORT=5432
+      - DB_NAME=tasklist
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres123
+    depends_on:
+      tasklist_db:
+        condition: service_healthy
+    # Removi o comando de reinstalar - deixe o Dockerfile cuidar disso
+    # Se precisar rodar em modo dev, use:
+    # command: yarn dev
+
+  tasklist_db:
+    image: postgres:15-alpine
+    container_name: tasklist_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: tasklist
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./config_docker/postgres_data:/var/lib/postgresql/data
+    networks:
+      - tasklist_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  tasklist_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.13.0.0/16
