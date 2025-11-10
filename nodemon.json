@@ -1,5 +1,10 @@
 {
+    "watch": ["src"],
+    "ext": "js,json",
+    "ignore": ["src/**/*.spec.js", "node_modules"],
     "execMap": {
         "js": "node -r sucrase/register"
-    }
+    },
+    "legacyWatch": true,
+    "verbose": true
 }

@@ -13,5 +13,5 @@ COPY . .
 
 EXPOSE 3000
 
-# Usar yarn para iniciar
-CMD ["yarn", "start"]
+# Usar yarn dev para hot reload com nodemon e start em produção
+CMD ["yarn", "dev"]
