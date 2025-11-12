@@ -29,11 +29,42 @@ class TaskController {
     }
 
     async update(req, res) {
-        return res.json({ message: 'Task updated' });
+        const schema = Yup.object().shape({
+            task: Yup.string(),
+            check: Yup.boolean(),
+        });
+
+        if (!(await schema.isValid(req.body))) {
+            return res.status(400).json({ error: 'Validation fails' });
+        }
+
+        const { task_id } = req.params;
+        const task = await Task.findByPk(task_id);
+
+        if (task.user_id !== req.userId) {
+            return res.status(401).json({ error: 'Not authorized' });
+        }
+
+        const updatedTask = await task.update(req.body);
+
+        return res.json(updatedTask);
     }
 
     async delete(req, res) {
-        return res.json({ message: 'Task deleted' });
+        const { task_id } = req.params;
+        const task = await Task.findByPk(task_id);
+
+        if (!task) {
+            return res.status(404).json({ error: 'Task not found' });
+        }
+
+        if (task.user_id !== req.userId) {
+            return res.status(401).json({ error: 'Not authorized' });
+        }
+
+        await task.destroy();
+
+        return res.send();
     }
 }
 

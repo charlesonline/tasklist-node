@@ -16,8 +16,8 @@ routes.use(authMiddleware);
 
 routes.post('/tasks', TaskController.store);
 routes.get('/tasks', TaskController.index);
-routes.put('/tasks/:id', TaskController.update);
-routes.delete('/tasks/:id', TaskController.delete);
+routes.put('/tasks/:task_id', TaskController.update);
+routes.delete('/tasks/:task_id', TaskController.delete);
 
 routes.post('/users', UserController.store);
 routes.put('/users', UserController.update);
