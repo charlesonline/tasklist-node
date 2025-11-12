@@ -5,7 +5,7 @@ services:
     ports:
       - "7001:3000"
     volumes:
-      - ./:/app
+      - ./:/app:delegated
       - /app/node_modules
     networks:
       - tasklistnet
@@ -16,6 +16,7 @@ services:
       - DB_NAME=tasklist
       - DB_USER=postgres
       - DB_PASSWORD=postgres123
+      - CHOKIDAR_USEPOLLING=true
     depends_on:
       tasklist_db:
         condition: service_healthy

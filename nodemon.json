@@ -6,5 +6,8 @@
         "js": "node -r sucrase/register"
     },
     "legacyWatch": true,
-    "verbose": true
+    "verbose": true,
+    "delay": 2000,
+    "polling": true,
+    "pollingInterval": 2000
 }
